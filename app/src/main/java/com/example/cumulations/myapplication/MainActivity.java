@@ -2,6 +2,8 @@ package com.example.cumulations.myapplication;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -22,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final RecyclerView recyclerView =findViewById(R.id.user_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         StringRequest request =new StringRequest(URL, new Response.Listener<String>() {
             @Override
@@ -30,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
                 GsonBuilder gsonBuilder=new GsonBuilder();
                 Gson gson=gsonBuilder.create();
                 User[] users=gson.fromJson(response,User[].class);
+
+                recyclerView.setAdapter(new GithubAdapter(MainActivity.this,users));
+
             }
         }, new Response.ErrorListener() {
             @Override
